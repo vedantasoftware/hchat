@@ -54,10 +54,12 @@ public class HChatSubscribe implements MqttCallback {
 		    {
 		    	System.out.println("Subscribing to topic " + hChat.topic + " qos "+iQos);
 		    	client.subscribe( hChat.topic, iQos);
+		    	System.out.println("Subscribing to topic " + hChat.topic + " qos "+iQos);
+		    	client.subscribe( "/HeartBeat", iQos);
 		    	System.out.println("Subscribing to topic " + "Chat" + " qos "+iQos);
-		    	client.subscribe("Chat", iQos);
+		    	client.subscribe("/Chat", iQos);
 		    	System.out.println("Subscribing to topic " + "File" + " qos "+iQos);
-		    	client.subscribe("File", iQos);
+		    	client.subscribe("/File", iQos);
 		    }
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -104,7 +106,7 @@ public class HChatSubscribe implements MqttCallback {
 	        //"  Consumed Message:\t" + new String(message.getPayload()) +
 	        "  QoS:\t" + message.getQos());
 	    */  
-		  if(topic.compareTo("File") == 0)
+		  if(topic.compareTo("/File") == 0)
 		  {
 			  if(message.getPayload().length == 44 )
 			  {
@@ -121,7 +123,7 @@ public class HChatSubscribe implements MqttCallback {
 	
 			  WriteToFile(message.getPayload(),FileName);
 		  }
-		  else if (topic.compareTo("HeartBeat") == 0){
+		  else if (topic.compareTo("/HeartBeat") == 0){
 			  System.out.println( "Topic:\t" + topic + 
 				        "  HeartBeat Received...Consumed Message:\t" + new String(message.getPayload()) +
 				        "  QoS:\t" + message.getQos());

@@ -119,7 +119,7 @@ class  FileTransferThread extends HChatClient{
 	}
 		
     public void run(){
-    	SendBinaryFile("D:/Bala.jpg");
+    	SendBinaryFile("D:/Bala.mp4");
     }
 
 	public void SendBinaryFile(String fileNameWithPath)
@@ -178,23 +178,23 @@ class  FileTransferThread extends HChatClient{
 					int bytesRead = input.read(result, 0, result.length); 
 					if (bytesRead > 0){
 						totalBytesRead = totalBytesRead + bytesRead;
+						System.out.println("Bytes Read from File:" + fileNameWithPath +" is:" + bytesRead);
+						
+						byte[] partialResult = new byte[bytesRead];
+						System.arraycopy(result, 
+								0,
+								partialResult,
+				                 0,
+				                 bytesRead);
+						
+						message = new MqttMessage(partialResult);
+						message.setQos(iQos);
+						
+					    if ( hChat.topic != null) {
+					    	client.publish(hChat.topic, message); // Blocking publish
+					    	//System.out.println("Message content is " + publishObj.content);
+					    }
 					}
-					System.out.println("Bytes Read from File:" + fileNameWithPath +" is:" + bytesRead);
-					
-					byte[] partialResult = new byte[bytesRead];
-					System.arraycopy(result, 
-							0,
-							partialResult,
-			                 0,
-			                 bytesRead);
-					
-					message = new MqttMessage(partialResult);
-					message.setQos(iQos);
-					
-				    if ( hChat.topic != null) {
-				    	client.publish(hChat.topic, message); // Blocking publish
-				    	//System.out.println("Message content is " + publishObj.content);
-				    }
 				    Thread.sleep(100);
 				}
 				/*
